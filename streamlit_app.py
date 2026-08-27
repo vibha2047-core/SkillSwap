@@ -1,195 +1,250 @@
-import gradio as gr
+import streamlit as st
 
 # ============================================================
 # 🎓 SKILLSWAP
 # Student-to-Student Skill Exchange Platform
 # ============================================================
 
-# ------------------------------------------------------------
+st.set_page_config(
+    page_title="SkillSwap",
+    page_icon="🎓",
+    layout="wide"
+)
+
+# ============================================================
 # SAMPLE STUDENT DATA
-# ------------------------------------------------------------
+# ============================================================
 
-students = [
-    {
-        "name": "Aditi",
-        "teach": "Canva",
-        "learn": "Python",
-        "level": "Beginner",
-        "mode": "Online",
-        "type": "Skill Exchange",
-        "fee": "Free",
-        "phone": "9876543210",
-        "email": "aditi@example.com",
-        "credits": 3
-    },
+if "students" not in st.session_state:
+    st.session_state.students = [
+        {
+            "name": "Aditi",
+            "teach": "Canva",
+            "learn": "Python",
+            "level": "Beginner",
+            "mode": "Online",
+            "type": "Skill Exchange",
+            "fee": "Free",
+            "phone": "9876543210",
+            "email": "aditi@example.com",
+            "credits": 3
+        },
+        {
+            "name": "Rahul",
+            "teach": "Python",
+            "learn": "Graphic Design",
+            "level": "Intermediate",
+            "mode": "Offline",
+            "type": "Skill Exchange",
+            "fee": "Free",
+            "phone": "9876543211",
+            "email": "rahul@example.com",
+            "credits": 5
+        },
+        {
+            "name": "Sneha",
+            "teach": "German",
+            "learn": "Photography",
+            "level": "Intermediate",
+            "mode": "Online",
+            "type": "Teach for Free",
+            "fee": "Free",
+            "phone": "9876543212",
+            "email": "sneha@example.com",
+            "credits": 4
+        },
+        {
+            "name": "Arjun",
+            "teach": "Photography",
+            "learn": "Video Editing",
+            "level": "Advanced",
+            "mode": "Offline",
+            "type": "Paid Mentoring",
+            "fee": "₹100/session",
+            "phone": "9876543213",
+            "email": "arjun@example.com",
+            "credits": 7
+        },
+        {
+            "name": "Meera",
+            "teach": "Excel",
+            "learn": "Python",
+            "level": "Beginner",
+            "mode": "Online",
+            "type": "Teach for Free",
+            "fee": "Free",
+            "phone": "9876543214",
+            "email": "meera@example.com",
+            "credits": 2
+        }
+    ]
 
-    {
-        "name": "Rahul",
-        "teach": "Python",
-        "learn": "Graphic Design",
-        "level": "Intermediate",
-        "mode": "Offline",
-        "type": "Skill Exchange",
-        "fee": "Free",
-        "phone": "9876543211",
-        "email": "rahul@example.com",
-        "credits": 5
-    },
-
-    {
-        "name": "Sneha",
-        "teach": "German",
-        "learn": "Photography",
-        "level": "Intermediate",
-        "mode": "Online",
-        "type": "Teach for Free",
-        "fee": "Free",
-        "phone": "9876543212",
-        "email": "sneha@example.com",
-        "credits": 4
-    },
-
-    {
-        "name": "Arjun",
-        "teach": "Photography",
-        "learn": "Video Editing",
-        "level": "Advanced",
-        "mode": "Offline",
-        "type": "Paid Mentoring",
-        "fee": "₹100/session",
-        "phone": "9876543213",
-        "email": "arjun@example.com",
-        "credits": 7
-    },
-
-    {
-        "name": "Meera",
-        "teach": "Excel",
-        "learn": "Python",
-        "level": "Beginner",
-        "mode": "Online",
-        "type": "Teach for Free",
-        "fee": "Free",
-        "phone": "9876543214",
-        "email": "meera@example.com",
-        "credits": 2
-    }
-]
+if "connection_requests" not in st.session_state:
+    st.session_state.connection_requests = []
 
 
 # ============================================================
-# CONNECTION REQUESTS
+# HEADER
 # ============================================================
 
-connection_requests = []
+st.title("🎓 SkillSwap")
+st.subheader("Learn. Teach. Connect.")
+st.write(
+    "A student-to-student platform for exchanging skills, "
+    "finding learning partners, and connecting with peers."
+)
+
+st.divider()
+
+
+# ============================================================
+# NAVIGATION
+# ============================================================
+
+tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
+    "🏠 Home",
+    "➕ Add Your Skill",
+    "🔄 Find Skill Swap",
+    "🤝 Request to Connect",
+    "👥 Browse Students",
+    "⭐ Skill Credits"
+])
 
 
 # ============================================================
 # HOME
 # ============================================================
 
-def home():
+with tab1:
 
-    return """
-# 🎓 SkillSwap
+    st.header("Welcome to SkillSwap! 👋")
 
-### Learn. Teach. Connect.
-
-**SkillSwap** is a student-to-student learning platform where
-students can exchange knowledge, find learning partners,
-or offer free/paid mentoring.
-
----
-
+    st.markdown("""
 ### 🔄 Skill Exchange
-
 Teach one skill and learn another.
 
 **No fee required.**
 
 ### 🆓 Teach for Free
-
 Share your knowledge with other students.
 
 ### 💰 Paid Mentoring
-
-Students with advanced skills can offer paid sessions.
+Advanced students can offer paid mentoring sessions.
 
 ---
 
 ### 🌟 Why SkillSwap?
 
-📚 Peer Learning  
-🤝 Student Connections  
-⭐ Motivation & Accountability  
-🌱 Explore New Skills
+📚 **Peer Learning**  
+🤝 **Student Connections**  
+⭐ **Motivation & Accountability**  
+🌱 **Explore New Skills**
 
 ---
 
 > **"The internet helps you learn a skill.
 > SkillSwap helps you find someone to learn it with."**
-"""
+""")
 
 
 # ============================================================
-# ADD SKILL
+# ADD YOUR SKILL
 # ============================================================
 
-def add_skill(
-    name,
-    teach,
-    learn,
-    level,
-    mode,
-    participation,
-    fee,
-    phone,
-    email
-):
+with tab2:
 
-    if not name or not teach or not phone or not email:
+    st.header("Create Your Skill Profile")
 
-        return """
-## ⚠️ Missing Information
+    st.write(
+        "Tell other students what you can teach "
+        "and what you want to learn."
+    )
 
-Please enter:
+    name = st.text_input(
+        "👤 Your Name",
+        placeholder="Enter your name"
+    )
 
-- Your name
-- Skill you can teach
-- Phone number
-- Email
-"""
+    teach = st.text_input(
+        "🟢 Skill You Can Teach",
+        placeholder="Example: Python"
+    )
 
-    # Determine fee
-    if participation == "Skill Exchange":
-        final_fee = "Free"
+    learn = st.text_input(
+        "🔵 Skill You Want to Learn",
+        placeholder="Example: Canva"
+    )
 
-    elif participation == "Teach for Free":
-        final_fee = "Free"
+    level = st.selectbox(
+        "📊 Skill Level",
+        ["Beginner", "Intermediate", "Advanced"]
+    )
 
-    else:
-        final_fee = fee if fee else "Fee not specified"
+    mode = st.selectbox(
+        "🌐 Preferred Mode",
+        ["Online", "Offline", "Both"]
+    )
 
+    participation = st.selectbox(
+        "💡 Participation Type",
+        [
+            "Skill Exchange",
+            "Teach for Free",
+            "Paid Mentoring"
+        ]
+    )
 
-    new_student = {
+    fee = ""
 
-        "name": name,
-        "teach": teach,
-        "learn": learn if learn else "None",
-        "level": level,
-        "mode": mode,
-        "type": participation,
-        "fee": final_fee,
-        "phone": phone,
-        "email": email,
-        "credits": 0
-    }
+    if participation == "Paid Mentoring":
+        fee = st.text_input(
+            "💰 Fee",
+            placeholder="Example: ₹100/session"
+        )
 
-    students.append(new_student)
+    phone = st.text_input(
+        "📱 Phone Number",
+        placeholder="Enter your phone number"
+    )
 
-    return f"""
-# ✅ Profile Created!
+    email = st.text_input(
+        "📧 Email",
+        placeholder="Enter your email"
+    )
 
+    if st.button("➕ Create Profile", type="primary"):
+
+        if not name or not teach or not phone or not email:
+
+            st.warning(
+                "Please enter your name, skill, phone number and email."
+            )
+
+        else:
+
+            if participation in ["Skill Exchange", "Teach for Free"]:
+                final_fee = "Free"
+            else:
+                final_fee = fee if fee else "Fee not specified"
+
+            new_student = {
+                "name": name,
+                "teach": teach,
+                "learn": learn if learn else "None",
+                "level": level,
+                "mode": mode,
+                "type": participation,
+                "fee": final_fee,
+                "phone": phone,
+                "email": email,
+                "credits": 0
+            }
+
+            st.session_state.students.append(new_student)
+
+            st.success("Profile created successfully! 🎉")
+
+            st.markdown(f"""
 ### 👤 {name}
 
 🟢 **Can Teach:** {teach}
@@ -204,265 +259,283 @@ Please enter:
 
 💰 **Fee:** {final_fee}
 
-📧 **Email:** {email}
-
-📱 **Phone:** {phone}
-
 ---
 
 Your profile is now available to other students.
 
-🔒 Your contact details will **not be shown publicly**.
-They are revealed only after a connection request.
-"""
+🔒 Contact details are shown when a student requests a connection.
+""")
 
 
 # ============================================================
-# FIND MATCHES
+# FIND SKILL SWAP
 # ============================================================
 
-def find_matches(wanted_skill, my_skill):
+with tab3:
 
-    if not wanted_skill:
+    st.header("🔍 Find Your Learning Partner")
 
-        return """
-## 🔍 Enter a skill
+    st.write(
+        "Enter the skill you can teach and the skill you want to learn."
+    )
 
-Enter the skill you want to learn.
-"""
+    my_skill = st.text_input(
+        "🟢 I Can Teach...",
+        placeholder="Example: German"
+    )
 
-    wanted_skill = wanted_skill.lower().strip()
+    wanted_skill = st.text_input(
+        "🔵 I Want to Learn...",
+        placeholder="Example: Python"
+    )
 
-    if my_skill:
-        my_skill = my_skill.lower().strip()
+    if st.button("🔍 Find My Match", type="primary"):
 
-    perfect_matches = []
-    other_matches = []
+        if not wanted_skill:
 
+            st.warning("Please enter a skill you want to learn.")
 
-    for index, student in enumerate(students):
+        else:
 
-        teaches = student["teach"].lower()
-        wants = student["learn"].lower()
+            wanted = wanted_skill.lower().strip()
 
-        # Student teaches what I want
-        if wanted_skill in teaches:
+            my = my_skill.lower().strip() if my_skill else ""
 
-            # PERFECT TWO-WAY MATCH
-            if my_skill and my_skill in wants:
+            perfect_matches = []
+            other_matches = []
 
-                perfect_matches.append(
-                    (index, student)
+            for index, student in enumerate(st.session_state.students):
+
+                teaches = student["teach"].lower()
+                wants = student["learn"].lower()
+
+                if wanted in teaches:
+
+                    if my and my in wants:
+                        perfect_matches.append((index, student))
+                    else:
+                        other_matches.append((index, student))
+
+            if perfect_matches:
+
+                st.subheader("🔥 Perfect Skill Swaps")
+
+                st.write(
+                    "These students can teach what you want "
+                    "and want to learn what you can teach."
                 )
 
-            else:
+                for index, student in perfect_matches:
 
-                other_matches.append(
-                    (index, student)
+                    with st.container(border=True):
+
+                        st.markdown(
+                            f"### 👤 {student['name']}"
+                        )
+
+                        st.write(
+                            f"🔄 **Perfect Skill Swap**"
+                        )
+
+                        st.write(
+                            f"🟢 Teaches: **{student['teach']}**"
+                        )
+
+                        st.write(
+                            f"🔵 Wants to Learn: **{student['learn']}**"
+                        )
+
+                        st.write(
+                            f"📊 Level: {student['level']}"
+                        )
+
+                        st.write(
+                            f"🌐 Mode: {student['mode']}"
+                        )
+
+                        st.write(
+                            f"💰 Fee: {student['fee']}"
+                        )
+
+                        st.code(
+                            f"Student ID: {index}"
+                        )
+
+            if other_matches:
+
+                st.subheader("🟡 Other Students Who Can Help")
+
+                for index, student in other_matches:
+
+                    with st.container(border=True):
+
+                        st.markdown(
+                            f"### 👤 {student['name']}"
+                        )
+
+                        st.write(
+                            f"🟢 Teaches: **{student['teach']}**"
+                        )
+
+                        st.write(
+                            f"🔵 Wants to Learn: **{student['learn']}**"
+                        )
+
+                        st.write(
+                            f"📊 Level: {student['level']}"
+                        )
+
+                        st.write(
+                            f"🌐 Mode: {student['mode']}"
+                        )
+
+                        st.write(
+                            f"💰 Fee: {student['fee']}"
+                        )
+
+                        st.code(
+                            f"Student ID: {index}"
+                        )
+
+            if not perfect_matches and not other_matches:
+
+                st.info(
+                    f"No student is currently teaching "
+                    f"**{wanted_skill.title()}**."
                 )
-
-
-    result = ""
-
-
-    # --------------------------------------------------------
-    # PERFECT MATCHES
-    # --------------------------------------------------------
-
-    if perfect_matches:
-
-        result += """
-# 🔥 Perfect Skill Swaps
-
-These students can teach what you want
-AND want to learn what you can teach.
-
-"""
-
-        for index, student in perfect_matches:
-
-            result += f"""
-### 👤 {student["name"]}
-
-🔄 **Perfect Skill Swap**
-
-🟢 Teaches: **{student["teach"]}**
-
-🔵 Wants to Learn: **{student["learn"]}**
-
-📊 Level: {student["level"]}
-
-🌐 Mode: {student["mode"]}
-
-💰 Fee: {student["fee"]}
-
-🆔 Student ID: `{index}`
-
----
-"""
-
-
-    # --------------------------------------------------------
-    # OTHER MATCHES
-    # --------------------------------------------------------
-
-    if other_matches:
-
-        result += """
-# 🟡 Other Students Who Can Help
-
-These students teach the skill you want,
-but there is no two-way skill match.
-
-"""
-
-        for index, student in other_matches:
-
-            result += f"""
-### 👤 {student["name"]}
-
-🟢 Teaches: **{student["teach"]}**
-
-🔵 Wants to Learn: **{student["learn"]}**
-
-📊 Level: {student["level"]}
-
-🌐 Mode: {student["mode"]}
-
-💰 Fee: {student["fee"]}
-
-🆔 Student ID: `{index}`
-
----
-"""
-
-
-    if not perfect_matches and not other_matches:
-
-        result = f"""
-# 😕 No Match Found
-
-We couldn't find anyone currently teaching:
-
-**{wanted_skill.title()}**
-
-Try another skill.
-"""
-
-
-    return result
 
 
 # ============================================================
 # REQUEST CONNECTION
 # ============================================================
 
-def request_connection(student_id):
+with tab4:
 
-    try:
+    st.header("🤝 Connect With a Student")
 
-        student_id = int(student_id)
+    st.write(
+        "Enter the Student ID shown in the search results."
+    )
 
-    except:
+    student_id = st.number_input(
+        "Student ID",
+        min_value=0,
+        step=1
+    )
 
-        return """
-⚠️ Please enter the Student ID shown in the search results.
-"""
+    if st.button("🤝 REQUEST TO CONNECT", type="primary"):
 
+        if student_id >= len(st.session_state.students):
 
-    if student_id < 0 or student_id >= len(students):
+            st.error("Student ID not found.")
 
-        return """
-⚠️ Student ID not found.
-"""
+        else:
 
+            student = st.session_state.students[student_id]
 
-    student = students[student_id]
+            st.session_state.connection_requests.append(
+                student["name"]
+            )
 
-    connection_requests.append(student["name"])
+            st.success(
+                f"Connection request sent to {student['name']}!"
+            )
 
+            st.subheader("📩 Contact Details")
 
-    return f"""
-# 🤝 Connection Request Sent!
+            st.markdown(
+                f"📧 **Email:** [{student['email']}](mailto:{student['email']})"
+            )
 
-Your request has been sent to:
+            st.markdown(
+                f"📱 **Phone:** [{student['phone']}](tel:{student['phone']})"
+            )
 
-### 👤 {student["name"]}
+            st.write(
+                "You can now contact the student and arrange a learning session."
+            )
 
-🟢 **Teaches:** {student["teach"]}
-
-🔵 **Wants to Learn:** {student["learn"]}
-
----
-
-### 📩 Contact Details
-
-📧 **Email:** {student["email"]}
-
-📱 **Phone:** {student["phone"]}
-
-You can now contact the student and
-arrange a learning session.
-
----
-
-🔒 **Privacy Note:**
-In a real application, contact details would
-only become visible after the other student
-accepts the request.
-"""
+            st.caption(
+                "🔒 In a real application, contact details would "
+                "only become visible after the other student accepts."
+            )
 
 
 # ============================================================
 # BROWSE STUDENTS
 # ============================================================
 
-def browse_students():
+with tab5:
 
-    result = "# 👥 Students on SkillSwap\n\n"
+    st.header("👥 Students on SkillSwap")
 
-    for index, student in enumerate(students):
+    if st.button("🔄 Refresh Students"):
 
-        result += f"""
-### 👤 {student["name"]}
+        st.rerun()
 
-🟢 **Can Teach:** {student["teach"]}
+    for index, student in enumerate(st.session_state.students):
 
-🔵 **Wants to Learn:** {student["learn"]}
+        with st.container(border=True):
 
-📊 **Level:** {student["level"]}
+            st.markdown(
+                f"### 👤 {student['name']}"
+            )
 
-🌐 **Mode:** {student["mode"]}
+            col1, col2 = st.columns(2)
 
-💡 **Type:** {student["type"]}
+            with col1:
 
-💰 **Fee:** {student["fee"]}
+                st.write(
+                    f"🟢 **Can Teach:** {student['teach']}"
+                )
 
-⭐ **Skill Credits:** {student["credits"]}
+                st.write(
+                    f"🔵 **Wants to Learn:** {student['learn']}"
+                )
 
-🆔 **Student ID:** `{index}`
+                st.write(
+                    f"📊 **Level:** {student['level']}"
+                )
 
-🔒 Contact details hidden
+                st.write(
+                    f"🌐 **Mode:** {student['mode']}"
+                )
 
----
+            with col2:
 
-"""
+                st.write(
+                    f"💡 **Type:** {student['type']}"
+                )
 
-    return result
+                st.write(
+                    f"💰 **Fee:** {student['fee']}"
+                )
+
+                st.write(
+                    f"⭐ **Skill Credits:** {student['credits']}"
+                )
+
+                st.code(
+                    f"Student ID: {index}"
+                )
+
+            st.caption("🔒 Contact details hidden")
 
 
 # ============================================================
 # SKILL CREDITS
 # ============================================================
 
-def credits_info():
+with tab6:
 
-    return """
-# ⭐ Skill Credits
+    st.header("⭐ Skill Credits")
 
-Skill Credits encourage students to
-share their knowledge.
+    st.write(
+        "Skill Credits encourage students to share "
+        "their knowledge."
+    )
 
+    st.markdown("""
 ### How it works:
 
 🎓 Teach another student
@@ -483,247 +556,15 @@ You teach **Canva**
 
 ↓
 
-⭐ +1 Skill Credit
+⭐ **+1 Skill Credit**
 
 ↓
 
-Use the credit to request help
-with **Python**
+Use the credit to request help with **Python**
 
 ---
 
 **Skill Credits are not money.**
 
-They represent participation in
-the SkillSwap community.
-"""
-
-
-# ============================================================
-# GRADIO INTERFACE
-# ============================================================
-
-with gr.Blocks(
-    title="SkillSwap",
-    theme=gr.themes.Soft()
-) as app:
-
-    gr.Markdown("""
-# 🎓 SkillSwap
-### *Learn. Teach. Connect.*
-
-Student-to-student knowledge exchange platform.
+They represent participation in the SkillSwap community.
 """)
-
-
-    # ========================================================
-    # HOME
-    # ========================================================
-
-    with gr.Tab("🏠 Home"):
-
-        gr.Markdown(home())
-
-
-    # ========================================================
-    # ADD SKILL
-    # ========================================================
-
-    with gr.Tab("➕ Add Your Skill"):
-
-        gr.Markdown("""
-## Create Your Skill Profile
-
-Tell other students what you can teach
-and what you want to learn.
-""")
-
-        name = gr.Textbox(
-            label="👤 Your Name",
-            placeholder="Enter your name"
-        )
-
-        teach = gr.Textbox(
-            label="🟢 Skill You Can Teach",
-            placeholder="Example: Python"
-        )
-
-        learn = gr.Textbox(
-            label="🔵 Skill You Want to Learn",
-            placeholder="Example: Canva"
-        )
-
-        level = gr.Dropdown(
-            [
-                "Beginner",
-                "Intermediate",
-                "Advanced"
-            ],
-            label="📊 Skill Level",
-            value="Beginner"
-        )
-
-        mode = gr.Dropdown(
-            [
-                "Online",
-                "Offline",
-                "Both"
-            ],
-            label="🌐 Preferred Mode",
-            value="Online"
-        )
-
-        participation = gr.Dropdown(
-            [
-                "Skill Exchange",
-                "Teach for Free",
-                "Paid Mentoring"
-            ],
-            label="💡 Participation Type",
-            value="Skill Exchange"
-        )
-
-        fee = gr.Textbox(
-            label="💰 Fee (Paid Mentoring only)",
-            placeholder="Example: ₹100/session"
-        )
-
-        phone = gr.Textbox(
-            label="📱 Phone Number",
-            placeholder="Enter your phone number"
-        )
-
-        email = gr.Textbox(
-            label="📧 Email",
-            placeholder="Enter your email"
-        )
-
-        add_button = gr.Button(
-            "➕ Create Profile",
-            variant="primary"
-        )
-
-        add_output = gr.Markdown()
-
-        add_button.click(
-            add_skill,
-            inputs=[
-                name,
-                teach,
-                learn,
-                level,
-                mode,
-                participation,
-                fee,
-                phone,
-                email
-            ],
-            outputs=add_output
-        )
-
-
-    # ========================================================
-    # FIND MATCH
-    # ========================================================
-
-    with gr.Tab("🔄 Find Skill Swap"):
-
-        gr.Markdown("""
-## 🔍 Find Your Learning Partner
-
-Enter both skills to find a two-way exchange.
-""")
-
-        my_skill = gr.Textbox(
-            label="🟢 I Can Teach...",
-            placeholder="Example: German"
-        )
-
-        wanted_skill = gr.Textbox(
-            label="🔵 I Want to Learn...",
-            placeholder="Example: Python"
-        )
-
-        find_button = gr.Button(
-            "🔍 Find My Match",
-            variant="primary"
-        )
-
-        match_output = gr.Markdown()
-
-        find_button.click(
-            find_matches,
-            inputs=[
-                wanted_skill,
-                my_skill
-            ],
-            outputs=match_output
-        )
-
-
-    # ========================================================
-    # CONNECT
-    # ========================================================
-
-    with gr.Tab("🤝 Request to Connect"):
-
-        gr.Markdown("""
-## 🤝 Connect With a Student
-
-Enter the **Student ID** shown in your search results.
-
-Your request will be sent to that student.
-""")
-
-        student_id = gr.Textbox(
-            label="Student ID",
-            placeholder="Example: 1"
-        )
-
-        connect_button = gr.Button(
-            "🤝 REQUEST TO CONNECT",
-            variant="primary"
-        )
-
-        connection_output = gr.Markdown()
-
-        connect_button.click(
-            request_connection,
-            inputs=student_id,
-            outputs=connection_output
-        )
-
-
-    # ========================================================
-    # BROWSE
-    # ========================================================
-
-    with gr.Tab("👥 Browse Students"):
-
-        browse_button = gr.Button(
-            "🔄 Refresh Students",
-            variant="primary"
-        )
-
-        browse_output = gr.Markdown()
-
-        browse_button.click(
-            browse_students,
-            outputs=browse_output
-        )
-
-
-    # ========================================================
-    # SKILL CREDITS
-    # ========================================================
-
-    with gr.Tab("⭐ Skill Credits"):
-
-        gr.Markdown(credits_info())
-
-
-# ============================================================
-# LAUNCH
-# ============================================================
-
-app.launch(share=True)
